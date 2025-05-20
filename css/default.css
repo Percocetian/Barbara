@@ -19,3 +19,77 @@
 #copyright a{color:#666}
 #icon{font-size: 48px;color: red;margin: 50 px; align-content: center;}
 #heartspan{align-content: center;text-align: center;margin: 20px;}
+@media screen and (max-width: 768px) {
+    #mainDiv {
+        width: 100%;
+        padding: 10px;
+    }
+    
+    #content {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    #code {
+        width: 90%;
+        margin: 0 auto;
+        text-align: center;
+        float: none;
+        padding: 20px 0;
+        font-size: 18px;
+    }
+    
+    #loveHeart {
+        float: none;
+        margin: 20px auto;
+        width: 100%;
+        height: auto;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    #garden {
+        display: none; /* Hide the animated heart */
+    }
+    
+    #words {
+        position: static;
+        transform: none;
+        width: 100%;
+        text-align: center;
+        padding: 20px 0;
+    }
+    
+    #messages {
+        font-size: 36px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #000000;
+    }
+    
+    #elapseClock {
+        font-size: 18px;
+        text-align: center;
+        line-height: 1.5;
+    }
+    
+    #elapseClock .digit {
+        font-size: 24px;
+        color: #000000;
+    }
+    
+    #loveu {
+        font-size: 24px;
+        padding: 15px;
+        margin-top: 20px;
+        text-align: center;
+        width: 100%;
+        margin: 0 auto;
+
+    }
+}

@@ -41,95 +41,69 @@ function getHeartPoint(angle) {
 	return new Array(offsetX + x, offsetY + y);
 }
 
+// Replace the startHeartAnimation function with this simpler version
 function startHeartAnimation() {
-	var interval = 50;
-	var angle = 10;
-	var heart = new Array();
-	var animationTimer = setInterval(function () {
-		var bloom = getHeartPoint(angle);
-		var draw = true;
-		for (var i = 0; i < heart.length; i++) {
-			var p = heart[i];
-			var distance = Math.sqrt(Math.pow(p[0] - bloom[0], 2) + Math.pow(p[1] - bloom[1], 2));
-			if (distance < Garden.options.bloomRadius.max * 1.3) {
-				draw = false;
-				break;
-			}
-		}
-		if (draw) {
-			heart.push(bloom);
-			garden.createRandomBloom(bloom[0], bloom[1]);
-		}
-		if (angle >= 30) {
-			clearInterval(animationTimer);
-			showMessages();
-		} else {
-			angle += 0.2;
-		}
-	}, interval);
+    showMessages();
 }
 
-(function($) {
-	$.fn.typewriter = function() {
-		this.each(function() {
-			var $ele = $(this), str = $ele.html(), progress = 0;
-			$ele.html('');
-			var timer = setInterval(function() {
-				var current = str.substr(progress, 1);
-				if (current == '<') {
-					progress = str.indexOf('>', progress) + 1;
-				} else {
-					progress++;
-				}
-				$ele.html(str.substring(0, progress) + (progress & 1 ? '_' : ''));
-				if (progress >= str.length) {
-					clearInterval(timer);
-				}
-			}, 75);
-		});
-		return this;
-	};
-})(jQuery);
-
-function timeElapse(date){
-	var current = Date();
-	var seconds = (Date.parse(current) - Date.parse(date)) / 1000;
-	var days = Math.floor(seconds / (3600 * 24));
-	seconds = seconds % (3600 * 24);
-	var hours = Math.floor(seconds / 3600);
-	if (hours < 10) {
-		hours = "0" + hours;
-	}
-	seconds = seconds % 3600;
-	var minutes = Math.floor(seconds / 60);
-	if (minutes < 10) {
-		minutes = "0" + minutes;
-	}
-	seconds = seconds % 60;
-	if (seconds < 10) {
-		seconds = "0" + seconds;
-	}
-	var result = "<span class=\"digit\">" + days + "</span> dana <span class=\"digit\">" + hours + "</span> sati <span class=\"digit\">" + minutes + "</span> minuta <span class=\"digit\">" + seconds + "</span> sekundi"; 
-	$("#elapseClock").html(result);
-}
-
+// Modify the showMessages function to show timer immediately
 function showMessages() {
-	adjustWordsPosition();
-	$('#messages').fadeIn(5000, function() {
-		showLoveU();
+    $('#messages').fadeIn(2000, function() {
+        timeElapse(together);
+        setInterval(function () {
+            timeElapse(together);
+        }, 500);
+        showLoveU();
+    });
+}
+
+// Modify the typewriter function to be slower
+$.fn.typewriter = function() {
+	this.each(function() {
+		var $ele = $(this), str = $ele.html(), progress = 0;
+		$ele.html('');
+		var timer = setInterval(function() {
+			var current = str.substr(progress, 1);
+			if (current == '<') {
+				progress = str.indexOf('>', progress) + 1;
+			} else {
+				progress++;
+			}
+			$ele.html(str.substring(0, progress) + (progress & 1 ? '_' : ''));
+			if (progress >= str.length) {
+				clearInterval(timer);
+				// Show messages and start timer after typing completes
+				setTimeout(function() {
+					$('#messages').fadeIn(2000, function() { // Slower fade in
+						timeElapse(together);
+						setInterval(function () {
+							timeElapse(together);
+						}, 250);
+						setTimeout(function() {
+							$('#loveu').fadeIn(3000);
+						}, 200);
+					});
+				}, 1000);
+			}
+		}, 5);
 	});
+	return this;
+};
+
+function timeElapse(date) {
+    var current = new Date();
+    var seconds = (Date.parse(current) - Date.parse(date)) / 1000;
+    var days = Math.floor(seconds / (3600 * 24));
+    seconds = seconds % (3600 * 24);
+    var hours = Math.floor(seconds / 3600);
+    seconds = seconds % 3600;
+    var minutes = Math.floor(seconds / 60);
+    seconds = Math.floor(seconds % 60);
+    var result = "<span class=\"digit\">" + days + "</span> dana <span class=\"digit\">" + hours + "</span> sati <span class=\"digit\">" + minutes + "</span> minuta <span class=\"digit\">" + seconds + "</span> sekundi"; 
+    $("#elapseClock").html(result);
 }
 
-function adjustWordsPosition() {
-	$('#words').css("position", "absolute");
-	$('#words').css("top", $("#garden").position().top + 195);
-	$('#words').css("left", $("#garden").position().left + 70);
-}
-
-function adjustCodePosition() {
-	$('#code').css("margin-top", ($("#garden").height() - $("#code").height()) / 2);
-}
-
+// Add this function back
 function showLoveU() {
-	$('#loveu').fadeIn(3000);
+    $('#loveu').fadeIn(3000);
 }
