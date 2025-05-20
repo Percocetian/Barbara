@@ -46,50 +46,64 @@ function startHeartAnimation() {
     showMessages();
 }
 
-// Modify the showMessages function to show timer immediately
+// Modify the showMessages function
 function showMessages() {
+    // Hide both elements initially
+    $('#messages').hide();
+    $('#elapseClock').hide();
+    
+    // Fade in ZAUVIJEK and timer together
     $('#messages').fadeIn(2000, function() {
         timeElapse(together);
-        setInterval(function () {
-            timeElapse(together);
-        }, 500);
-        showLoveU();
+        $('#elapseClock').fadeIn(2000, function() {
+            // Start updating the timer only after fade-in is complete
+            setInterval(function () {
+                timeElapse(together);
+            }, 500);
+            
+            // Show love text after timer is visible
+            setTimeout(function() {
+                showLoveU();
+            }, 2000);
+        });
     });
 }
 
-// Modify the typewriter function to be slower
+// Update the showLoveU function
+function showLoveU() {
+    $('#loveu').fadeIn(1500, function() {
+        // After love text fades in, fade in the gallery
+        setTimeout(function() {
+            $('#gallery').css('display', 'block').hide().fadeIn(1500);
+        }, 500);
+    });
+}
+
+// Update the typewriter function to remove duplicate timer initialization
 $.fn.typewriter = function() {
-	this.each(function() {
-		var $ele = $(this), str = $ele.html(), progress = 0;
-		$ele.html('');
-		var timer = setInterval(function() {
-			var current = str.substr(progress, 1);
-			if (current == '<') {
-				progress = str.indexOf('>', progress) + 1;
-			} else {
-				progress++;
-			}
-			$ele.html(str.substring(0, progress) + (progress & 1 ? '_' : ''));
-			if (progress >= str.length) {
-				clearInterval(timer);
-				// Show messages and start timer after typing completes
-				setTimeout(function() {
-					$('#messages').fadeIn(2000, function() { // Slower fade in
-						timeElapse(together);
-						setInterval(function () {
-							timeElapse(together);
-						}, 250);
-						setTimeout(function() {
-							$('#loveu').fadeIn(3000);
-						}, 200);
-					});
-				}, 1000);
-			}
-		}, 5);
-	});
-	return this;
+    this.each(function() {
+        var $ele = $(this), str = $ele.html(), progress = 0;
+        $ele.html('');
+        var timer = setInterval(function() {
+            var current = str.substr(progress, 1);
+            if (current == '<') {
+                progress = str.indexOf('>', progress) + 1;
+            } else {
+                progress++;
+            }
+            $ele.html(str.substring(0, progress) + (progress & 1 ? '_' : ''));
+            if (progress >= str.length) {
+                clearInterval(timer);
+                setTimeout(function() {
+                    startHeartAnimation();
+                }, 1000);
+            }
+        }, 55); // Slower typing speed
+    });
+    return this;
 };
 
+// Update the timeElapse function to handle opacity
 function timeElapse(date) {
     var current = new Date();
     var seconds = (Date.parse(current) - Date.parse(date)) / 1000;
@@ -103,7 +117,9 @@ function timeElapse(date) {
     $("#elapseClock").html(result);
 }
 
-// Add this function back
-function showLoveU() {
-    $('#loveu').fadeIn(3000);
-}
+// Add this function to ensure images load properly
+$(document).ready(function() {
+    $('.gallery-item img').on('error', function() {
+        $(this).attr('src', 'images/placeholder.jpg');
+    });
+});
