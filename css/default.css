@@ -61,7 +61,7 @@ html, body {
     -webkit-text-size-adjust: 100%;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 390px) {
     #mainDiv {
         width: 100%;
         padding: 10px;
